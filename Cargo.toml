@@ -1,0 +1,19 @@
+[package]
+name = "momo"
+version = "0.1.0"
+edition = "2021"
+
+[workspace]
+members = [".", "entity", "migration"]
+
+[dependencies]
+entity = { path = "entity" }
+
+sea-orm = { version = "1.1.1", features = ["sqlx-sqlite", "runtime-tokio-native-tls"] }
+
+
+[dependencies.tokio]
+version = "1.43.0"
+features = [
+
+]
