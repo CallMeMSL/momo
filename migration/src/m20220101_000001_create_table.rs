@@ -6,36 +6,74 @@ pub struct Migration;
 #[async_trait::async_trait]
 impl MigrationTrait for Migration {
     async fn up(&self, manager: &SchemaManager) -> Result<(), DbErr> {
-        // Replace the sample below with your own migration scripts
-        todo!();
-
         manager
             .create_table(
                 Table::create()
-                    .table(Post::Table)
+                    .table(User::Table)
                     .if_not_exists()
-                    .col(pk_auto(Post::Id))
-                    .col(string(Post::Title))
-                    .col(string(Post::Text))
+                    .col(pk_auto(User::Id))
+                    .col(string(User::DiscordToken))
                     .to_owned(),
             )
-            .await
+            .await?;
+        manager.create_table(
+            Table::create()
+                .table(Show::Table)
+                .if_not_exists()
+                .col(pk_auto(Show::Id))
+                .col(string(Show::Name))
+                .col(string(Show::ImageUrl))
+                .col(string(Show::Description))
+                .to_owned(),
+        ).await?;
+        manager.create_table(
+            Table::create()
+                .table(Subscription::Table)
+                .if_not_exists()
+                .col(pk_auto(Subscription::Id))
+                .foreign_key(
+                    ForeignKey::create()
+                        .name("fk_user_id")
+                        .from(User::Table, User::Id)
+                        .to(Subscription::Table, Subscription::UserId),
+                )
+                .foreign_key(
+                    ForeignKey::create()
+                        .name("fk_user_id")
+                        .from(Show::Table, Show::Id)
+                        .to(Subscription::Table, Subscription::ShowId),
+                )
+                .to_owned(),
+        ).await
     }
 
     async fn down(&self, manager: &SchemaManager) -> Result<(), DbErr> {
-        // Replace the sample below with your own migration scripts
-        todo!();
-
         manager
-            .drop_table(Table::drop().table(Post::Table).to_owned())
+            .drop_table(Table::drop().table(User::Table).to_owned())
             .await
     }
 }
 
 #[derive(DeriveIden)]
-enum Post {
+enum User {
     Table,
     Id,
-    Title,
-    Text,
+    DiscordToken,
+}
+
+#[derive(DeriveIden)]
+enum Show {
+    Table,
+    Id,
+    Name,
+    ImageUrl,
+    Description,
+}
+
+#[derive(DeriveIden)]
+enum Subscription {
+    Table,
+    Id,
+    UserId,
+    ShowId,
 }
