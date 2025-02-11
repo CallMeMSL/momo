@@ -16,35 +16,41 @@ impl MigrationTrait for Migration {
                     .to_owned(),
             )
             .await?;
-        manager.create_table(
-            Table::create()
-                .table(Show::Table)
-                .if_not_exists()
-                .col(pk_auto(Show::Id))
-                .col(string(Show::Name))
-                .col(string(Show::ImageUrl))
-                .col(string(Show::Description))
-                .to_owned(),
-        ).await?;
-        manager.create_table(
-            Table::create()
-                .table(Subscription::Table)
-                .if_not_exists()
-                .col(pk_auto(Subscription::Id))
-                .foreign_key(
-                    ForeignKey::create()
-                        .name("fk_user_id")
-                        .from(User::Table, User::Id)
-                        .to(Subscription::Table, Subscription::UserId),
-                )
-                .foreign_key(
-                    ForeignKey::create()
-                        .name("fk_user_id")
-                        .from(Show::Table, Show::Id)
-                        .to(Subscription::Table, Subscription::ShowId),
-                )
-                .to_owned(),
-        ).await
+        manager
+            .create_table(
+                Table::create()
+                    .table(Show::Table)
+                    .if_not_exists()
+                    .col(pk_auto(Show::Id))
+                    .col(string(Show::Name))
+                    .col(string(Show::ImageUrl))
+                    .col(string(Show::Description))
+                    .to_owned(),
+            )
+            .await?;
+        manager
+            .create_table(
+                Table::create()
+                    .table(Subscription::Table)
+                    .if_not_exists()
+                    .col(pk_auto(Subscription::Id))
+                    .col(integer(Subscription::UserId))
+                    .foreign_key(
+                        ForeignKey::create()
+                            .name("FK_subscription_user_id")
+                            .from(Subscription::Table, Subscription::UserId)
+                            .to(User::Table, User::Id),
+                    )
+                    .col(integer(Subscription::ShowId))
+                    .foreign_key(
+                        ForeignKey::create()
+                            .name("FK_subscription_show_id")
+                            .from(Subscription::Table, Subscription::ShowId)
+                            .to(Show::Table, Show::Id),
+                    )
+                    .to_owned(),
+            )
+            .await
     }
 
     async fn down(&self, manager: &SchemaManager) -> Result<(), DbErr> {

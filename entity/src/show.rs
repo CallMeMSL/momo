@@ -10,9 +10,19 @@ pub struct Model {
     pub name: String,
     pub image_url: String,
     pub description: String,
+    pub mal_id: i32,
 }
 
 #[derive(Copy, Clone, Debug, EnumIter, DeriveRelation)]
-pub enum Relation {}
+pub enum Relation {
+    #[sea_orm(has_many = "super::subscription::Entity")]
+    Subscription,
+}
+
+impl Related<super::subscription::Entity> for Entity {
+    fn to() -> RelationDef {
+        Relation::Subscription.def()
+    }
+}
 
 impl ActiveModelBehavior for ActiveModel {}

@@ -2,6 +2,7 @@
 
 pub mod prelude;
 
+pub mod misc;
 pub mod show;
 pub mod subscription;
 pub mod user;
