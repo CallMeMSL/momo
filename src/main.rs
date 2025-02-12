@@ -5,6 +5,7 @@ use std::io::Read;
 use anyhow::Result;
 
 pub mod torrent;
+pub mod schema;
 
 fn main() -> Result<()> {
     let mut file = File::open("res/shan.torrent")?;
