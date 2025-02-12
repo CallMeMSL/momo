@@ -4,7 +4,6 @@ use std::fs::File;
 use std::io::Read;
 use anyhow::Result;
 
-mod db;
 pub mod torrent;
 
 fn main() -> Result<()> {
