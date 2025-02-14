@@ -2,7 +2,7 @@
 
 diesel::table! {
     entries (id) {
-        id -> Nullable<Text>,
-        timestamp -> Nullable<Text>,
+        id -> Text,
+        timestamp -> Text,
     }
 }

@@ -1,9 +1,10 @@
 // @generated automatically by Diesel CLI.
 
 diesel::table! {
-    kv (key) {
-        key -> Text,
-        value -> Text,
+    misc (id) {
+        id -> Int4,
+        oai -> Text,
+        last_show_update -> Timestamp,
     }
 }
 
@@ -36,7 +37,7 @@ diesel::joinable!(subscriptions -> shows (show_id));
 diesel::joinable!(subscriptions -> users (user_id));
 
 diesel::allow_tables_to_appear_in_same_query!(
-    kv,
+    misc,
     shows,
     subscriptions,
     users,
