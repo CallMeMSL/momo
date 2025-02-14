@@ -15,7 +15,7 @@ dotenvy = "0.15"
 
 [dependencies.diesel]
 version = "2.2.0"
-features = ["postgres"]
+features = ["postgres", "sqlite"]
 
 [dependencies.tokio]
 version = "1.43.0"
